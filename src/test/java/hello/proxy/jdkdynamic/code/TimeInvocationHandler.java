@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 
 @Slf4j
 public class TimeInvocationHandler implements InvocationHandler {
-    private final Object target;
+    private final Object target; // 프록시 이후 객체로 모든 다 되도록 Object
 
     public TimeInvocationHandler(Object target) {
         this.target = target;
@@ -23,6 +23,8 @@ public class TimeInvocationHandler implements InvocationHandler {
 
         long resultTime = startTime - emdTime;
 
-        log.info("TimeProxy 종류 r")
+        log.info("TimeProxy 종료 resultTime={}", resultTime);
+
+        return result;
     }
 }
