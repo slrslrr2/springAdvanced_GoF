@@ -17,7 +17,6 @@ public class OrderControllerConcreteProxy extends OrderControllerV2 {
     @Override
     public String request(String itemId) {
         TraceStatus status = null;
-
         try{
             status = logTrace.begin("OrderController.request()");
             //target 호출
