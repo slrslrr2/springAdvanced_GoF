@@ -20,9 +20,7 @@ public class TimeInvocationHandler implements InvocationHandler {
 
         Object result = method.invoke(target, args);
         long emdTime = System.currentTimeMillis();
-
         long resultTime = startTime - emdTime;
-
         log.info("TimeProxy 종료 resultTime={}", resultTime);
 
         return result;
