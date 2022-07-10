@@ -142,7 +142,8 @@ INFO hello.proxy.jdkdynamic.JdkDynamicProxyTest - proxyClass=class com.sun.proxy
 
 5. AImpl 인스턴스의 call() 의 실행이 끝나면 TimeInvocationHandler 로 응답이 돌아온다. 시간 로그를 출력하고 결과를 반환한다.
 
-![image-20220704222539101](image-20220704222539101.png)
+<img width="741" alt="image" src="https://user-images.githubusercontent.com/58017318/178129039-c0405fa9-b754-4e41-84e1-f4144363e7c9.png">
+
 
 > $proxy1은 사용자가 만든 클래스가 아닌 아래 소스를 통해 만들었다.
 >
@@ -344,14 +345,14 @@ public OrderRepositoryV1 orderRepository(LogTrace logTrace) {
 }
 ```
 
-![image-20220704233321629](image-20220704233321629.png)
+<img width="744" alt="image" src="https://user-images.githubusercontent.com/58017318/178129106-e6322767-0803-4661-948d-1fa7596ed6c7.png">
 
 - 점선은 직접만든 클래스가 아니다
 - InvocationHandler를 상속받은 클래스가 공통으로 처리된다.
 
 
 
-![image-20220704233546031](image-20220704233546031.png)
+<img width="735" alt="image" src="https://user-images.githubusercontent.com/58017318/178129122-3190d790-93b0-4e90-9dd4-fc9238ab6b65.png">
 
 - 클라이언트가 request 시 
   1. 프록시 객체가 실행되고
@@ -422,28 +423,29 @@ public class ConcreteService {
 
 ```java
 @Slf4j
-public class TimeInvocationHandler implements InvocationHandler {
-  private final Object target; // 프록시 이후 객체로 모든 다 되도록 Object
+public class TimeMethodInterceptor implements MethodInterceptor {
+    private final Object target;
 
-  public TimeInvocationHandler(Object target) {
-    this.target = target;
-  }
+    public TimeMethodInterceptor(Object target) {
+        this.target = target;
+    }
 
-  @Override
-  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    log.info("TimeProxy 실행");
-    long startTime = System.currentTimeMillis();
+    @Override
+    public Object intercept(Object obj, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+        log.info("TimeProxy 실행");
+        long startTime = System.currentTimeMillis();
 
-    Object result = method.invoke(target, args);
-    long emdTime = System.currentTimeMillis();
+        Object result = methodProxy.invoke(target, args);
+        long emdTime = System.currentTimeMillis();
 
-    long resultTime = startTime - emdTime;
+        long resultTime = startTime - emdTime;
 
-    log.info("TimeProxy 종료 resultTime={}", resultTime);
+        log.info("TimeProxy 종료 resultTime={}", resultTime);
 
-    return result;
-  }
+        return result;
+    }
 }
+
 ```
 
 ```java
@@ -464,3 +466,4 @@ public class CglibTest {
 }
 ```
 
+<img width="1677" alt="image-20220710114854037" src="https://user-images.githubusercontent.com/58017318/178129332-ef9860ba-7f32-45a0-91e2-ea3f79768945.png">
