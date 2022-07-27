@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Import;
 @Import({AppV1Config.class, AppV2Config.class})
 public class AppConfig {
     @Bean
-    public LogTraceAspect logTraceAspect(LogTrace logTrace) {
+    public LogTraceAspect logTraceAspect(LogTrace logTrace){
         return new LogTraceAspect(logTrace);
     }
 }
